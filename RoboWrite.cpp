@@ -1,9 +1,8 @@
 #include "RoboWrite.h"
 
-RoboWrite::RoboWrite(AccelStepper stepper1, AccelStepper stepper2, Servo myservo,long wheelDiameter, long width)
+RoboWrite::RoboWrite(AccelStepper& stepper1, AccelStepper& stepper2, Servo myservo,long wheelDiameter, long width) :
+_stepper1(stepper1), _stepper2(stepper2)
 {
-	_stepper1 = stepper1;
-	_stepper2 = stepper2;
 	_BACKWARD = -1;
 	_FORWARD = 1;
 	_circumference = wheelDiameter * 3.14;
@@ -17,7 +16,7 @@ RoboWrite::RoboWrite(AccelStepper stepper1, AccelStepper stepper2, Servo myservo
 void RoboWrite::forward(long inches) {
 
   int steps = -(inches * 2055) / _circumference ;
-  step(steps, steps);
+  step(steps, -steps);
 }
 
 void RoboWrite::reverse(long inches) {
@@ -36,7 +35,7 @@ void RoboWrite::turnRightArc(long theta){
 }
 
 void RoboWrite::turnLeftPoint(long theta){
-  int steps = theta * WIDTH * 3.14 * 2055 / (_circumference * 360);
+  int steps = 2 * theta * WIDTH * 3.14 * 2055 / (_circumference * 360);
   step(-steps, steps);
 }
 
